@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0c10">
+  <title>Estoque</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <main id="screen">
+
+    <!-- ========== INÍCIO ========== -->
+    <section class="view" id="view-inicio">
+      <header class="brand">
+        <div class="logo" data-icon="box"></div>
+        <div><h1>Estoque</h1><p>Controle fácil, negócios fortes.</p></div>
+      </header>
+
+      <div class="search">
+        <i data-icon="search"></i>
+        <input id="home-q" placeholder="Buscar produto..." autocomplete="off">
+        <button class="icon-btn" id="home-scan" data-icon="scan" aria-label="Escanear"></button>
+      </div>
+
+      <div class="grid2">
+        <button class="card action" id="btn-cadastro"><i data-icon="box"></i><h3>Cadastro<br>de Produtos</h3><p>Adicione, edite ou veja seus produtos</p></button>
+        <button class="card action" id="btn-entrada"><i data-icon="down"></i><h3>Entrada de<br>Mercadoria</h3><p>Registre novas compras</p></button>
+        <button class="card action" id="btn-saida"><i data-icon="up"></i><h3>Saída de<br>Mercadoria</h3><p>Registre vendas, consumo ou perdas</p></button>
+      </div>
+
+      <div class="card summary">
+        <div class="summary-title"><i data-icon="chart"></i><span>Resumo do Estoque</span></div>
+        <div class="summary-grid">
+          <div><small>Total de itens</small><b id="s-total">0</b></div>
+          <div><small>Em estoque</small><b class="green" id="s-ok">0</b></div>
+          <div><small>Em falta</small><b class="red" id="s-falta">0</b></div>
+          <div><small>Estoque mínimo</small><b class="yellow" id="s-min">0</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PRODUTOS ========== -->
+    <section class="view" id="view-produtos">
+      <header class="topbar">
+        <button class="icon-btn" data-back data-icon="back" aria-label="Voltar"></button>
+        <h2>Buscar Produto</h2>
+        <button class="icon-btn pink" id="p-scan" data-icon="scan" aria-label="Escanear"></button>
+      </header>
+      <div class="row">
+        <div class="search grow"><i data-icon="search"></i><input id="p-q" placeholder="Digite o nome, código ou categoria..." autocomplete="off"></div>
+        <button class="icon-btn pink" id="p-filter" data-icon="filter" aria-label="Filtro de estoque baixo"></button>
+      </div>
+      <div class="chips" id="p-chips"></div>
+      <div id="p-list" class="list"></div>
+      <button class="fab" id="fab-add" data-icon="plus" aria-label="Novo produto"></button>
+    </section>
+
+    <!-- ========== CADASTRO ========== -->
+    <section class="view" id="view-cadastro">
+      <header class="topbar">
+        <button class="icon-btn" data-back data-icon="back" aria-label="Voltar"></button>
+        <h2 id="c-title">Cadastro de Produto</h2>
+        <button class="icon-btn red" id="c-del" data-icon="trash" aria-label="Excluir"></button>
+      </header>
+
+      <label class="photo" for="c-foto">
+        <img id="c-img" alt="" hidden>
+        <div id="c-ph"><i data-icon="camera"></i><span>Adicionar foto</span></div>
+        <span class="badge" data-icon="camera"></span>
+      </label>
+      <input type="file" id="c-foto" accept="image/*" hidden>
+
+      <label class="field">Nome do produto <em>*</em><input id="c-nome" placeholder="Ex: Leite Integral 1L"></label>
+      <label class="field">Código <small>(opcional)</small><input id="c-codigo" placeholder="Ex: 00123"></label>
+      <label class="field">Categoria <em>*</em><select id="c-cat"></select></label>
+      <label class="field">Unidade de medida <em>*</em><select id="c-un"></select></label>
+      <label class="field">Estoque mínimo<input id="c-min" type="number" min="0" step="any" inputmode="decimal" placeholder="Ex: 10"></label>
+      <label class="field" id="c-estoque-wrap">Estoque inicial <small>(opcional)</small><input id="c-estoque" type="number" min="0" step="any" inputmode="decimal" placeholder="Ex: 0"></label>
+      <label class="field">Preço de custo <small>(opcional)</small><input id="c-custo" type="number" min="0" step="0.01" inputmode="decimal" placeholder="R$ 0,00"></label>
+      <label class="field">Preço de venda <small>(opcional)</small><input id="c-venda" type="number" min="0" step="0.01" inputmode="decimal" placeholder="R$ 0,00"></label>
+      <button class="btn" id="c-save">Salvar</button>
+    </section>
+
+    <!-- ========== ENTRADA / SAÍDA ========== -->
+    <section class="view" id="view-mov">
+      <header class="topbar">
+        <button class="icon-btn" data-back data-icon="back" aria-label="Voltar"></button>
+        <h2 id="m-title">Saída de Mercadoria</h2>
+      </header>
+
+      <div class="card hero">
+        <div class="hero-ico" id="m-ico"></div>
+        <div><h3 id="m-hero-t">Registrar nova saída</h3><p id="m-hero-p">Adicione os produtos e as quantidades retiradas do estoque.</p></div>
+      </div>
+
+      <h4 class="label" id="m-tipo-label">Tipo de saída</h4>
+      <div class="seg" id="m-seg"></div>
+
+      <h4 class="label" id="m-data-label">Data da saída</h4>
+      <div class="field-icon"><i data-icon="cal"></i><input type="date" id="m-data"></div>
+
+      <div class="row between">
+        <h4 class="label nm">Produtos</h4>
+        <button class="btn small" id="m-add"><i data-icon="plus"></i> Adicionar produto</button>
+      </div>
+      <div id="m-itens" class="list"></div>
+
+      <h4 class="label">Observações <small>(opcional)</small></h4>
+      <textarea id="m-obs" rows="2" placeholder="Ex: Pedido #1234 - Cliente João"></textarea>
+
+      <button class="btn" id="m-save">Salvar</button>
+    </section>
+
+    <!-- ========== MOVIMENTAÇÕES ========== -->
+    <section class="view" id="view-movimentacoes">
+      <header class="brand slim"><div class="logo" data-icon="swap"></div><div><h1>Movimentações</h1><p>Histórico de entradas e saídas</p></div></header>
+      <div class="grid2 tight">
+        <button class="btn ghost" id="mv-entrada"><i data-icon="down"></i> Nova entrada</button>
+        <button class="btn ghost" id="mv-saida"><i data-icon="up"></i> Nova saída</button>
+      </div>
+      <div class="chips" id="mv-chips"></div>
+      <div id="mv-list" class="list"></div>
+    </section>
+
+    <!-- ========== MAIS ========== -->
+    <section class="view" id="view-mais">
+      <header class="brand">
+        <div class="logo" data-icon="box"></div>
+        <div><h1>Estoque</h1><p>Controle fácil, negócios fortes.</p></div>
+        <button class="icon-btn pink push" data-go="config" data-icon="gear" aria-label="Configurações"></button>
+      </header>
+      <button class="card menu-item" data-go="empresa"><span class="mi-ico" data-icon="store"></span><div><b id="mais-empresa">Minha Empresa</b><small id="mais-ramo">Padaria e Confeitaria</small></div><i data-icon="chev"></i></button>
+      <div class="card menu-group">
+        <button class="menu-item" data-go="relatorios"><span class="mi-ico" data-icon="file"></span><div><b>Relatórios</b><small>Ver movimentações e saldo</small></div><i data-icon="chev"></i></button>
+        <button class="menu-item" data-go="compras"><span class="mi-ico" data-icon="file"></span><div><b>Lista de Compras</b><small>Produtos em falta e mínimo</small></div><i data-icon="chev"></i></button>
+        <button class="menu-item" data-go="config"><span class="mi-ico" data-icon="gear"></span><div><b>Configurações</b><small>Ajustes do app</small></div><i data-icon="chev"></i></button>
+        <button class="menu-item" data-go="ajuda"><span class="mi-ico" data-icon="help"></span><div><b>Ajuda</b><small>Dúvidas e suporte</small></div><i data-icon="chev"></i></button>
+      </div>
+    </section>
+
+    <!-- ========== EMPRESA ========== -->
+    <section class="view" id="view-empresa">
+      <header class="topbar"><button class="icon-btn" data-back data-icon="back"></button><h2>Minha Empresa</h2></header>
+      <label class="field">Nome da empresa<input id="e-nome" placeholder="Ex: Padaria do Zé"></label>
+      <label class="field">Ramo de atividade<input id="e-ramo" placeholder="Ex: Padaria e Confeitaria"></label>
+      <button class="btn" id="e-save">Salvar</button>
+    </section>
+
+    <!-- ========== RELATÓRIOS ========== -->
+    <section class="view" id="view-relatorios">
+      <header class="topbar"><button class="icon-btn" data-back data-icon="back"></button><h2>Relatórios</h2></header>
+      <div class="grid2 tight" id="r-cards"></div>
+      <h4 class="label">Saldo por produto</h4>
+      <div id="r-list" class="list"></div>
+    </section>
+
+    <!-- ========== LISTA DE COMPRAS ========== -->
+    <section class="view" id="view-compras">
+      <header class="topbar"><button class="icon-btn" data-back data-icon="back"></button><h2>Lista de Compras</h2></header>
+      <div id="lc-list" class="list"></div>
+      <button class="btn" id="lc-copy">Copiar lista</button>
+    </section>
+
+    <!-- ========== CONFIGURAÇÕES ========== -->
+    <section class="view" id="view-config">
+      <header class="topbar"><button class="icon-btn" data-back data-icon="back"></button><h2>Configurações</h2></header>
+      <div class="card pad">
+        <h3>Backup dos dados</h3>
+        <p class="mut">Os dados ficam salvos neste aparelho (IndexedDB). Exporte para guardar uma cópia.</p>
+        <button class="btn ghost block" id="cfg-export">Exportar backup (.json)</button>
+        <button class="btn ghost block" id="cfg-import">Importar backup</button>
+        <input type="file" id="cfg-file" accept="application/json" hidden>
+      </div>
+      <div class="card pad">
+        <h3>Dados de exemplo</h3>
+        <p class="mut">Carrega os produtos do protótipo para você testar.</p>
+        <button class="btn ghost block" id="cfg-demo">Carregar exemplos</button>
+      </div>
+      <div class="card pad">
+        <h3>Zona de perigo</h3>
+        <button class="btn danger block" id="cfg-clear">Apagar todos os dados</button>
+      </div>
+    </section>
+
+    <!-- ========== AJUDA ========== -->
+    <section class="view" id="view-ajuda">
+      <header class="topbar"><button class="icon-btn" data-back data-icon="back"></button><h2>Ajuda</h2></header>
+      <div class="card pad help">
+        <h3>Como usar</h3>
+        <p><b>1. Cadastre</b> seus produtos (nome, categoria, unidade e estoque mínimo).</p>
+        <p><b>2. Registre entradas</b> quando comprar mercadoria — o saldo aumenta.</p>
+        <p><b>3. Registre saídas</b> (venda, consumo ou perda) — o saldo diminui.</p>
+        <p><b>4. Acompanhe</b> o resumo na tela inicial e a Lista de Compras para saber o que repor.</p>
+        <p class="mut">Cores: <span class="green">verde</span> = ok, <span class="orange">laranja</span> = abaixo do mínimo, <span class="red">vermelho</span> = em falta.</p>
+      </div>
+    </section>
+  </main>
+
+  <nav id="nav">
+    <button data-go="inicio" class="on"><i data-icon="home"></i><span>Início</span></button>
+    <button data-go="produtos"><i data-icon="box"></i><span>Produtos</span></button>
+    <button data-go="movimentacoes"><i data-icon="swap"></i><span>Movimentações</span></button>
+    <button data-go="mais"><i data-icon="menu"></i><span>Mais</span></button>
+  </nav>
+
+  <!-- seletor de produto (bottom sheet) -->
+  <div id="sheet" class="sheet hidden">
+    <div class="sheet-box">
+      <div class="sheet-head"><h3 id="sheet-title">Adicionar produto</h3><button class="icon-btn" id="sheet-close" data-icon="x" aria-label="Fechar"></button></div>
+      <div id="sheet-body"></div>
+    </div>
+  </div>
+
+  <!-- leitor de código de barras -->
+  <div id="scanner" class="scanner hidden">
+    <video id="scan-video" playsinline muted></video>
+    <button class="btn" id="scan-close">Fechar</button>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<script src="js/db.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
